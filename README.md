@@ -1,0 +1,2 @@
+- This is a personal API project utilizing node.js, express.js and mongodb via mongoose library
+- This md file will be updated occasionally
