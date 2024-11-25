@@ -32,14 +32,26 @@ const User = mongoose.model('User', {
       }
     }
   },
+  password: {
+    type: String,
+    required: true,
+    minlength: 7,
+    trim: true,
+    validate(value) {
+      //TODO
+    }
+  },
 });
 
 const Task = mongoose.model('Task', {
   description: {
     type: String,
+    required: true,
+    trim: true
   },
   completed: {
     type: Boolean,
+    default: false
   },
 });
 
@@ -60,7 +72,8 @@ const Task = mongoose.model('Task', {
 const user = new User({
   name: 'Daniel',
   age: 33,
-  email: 'daniel.torres3rd@gmail.com'
+  email: 'daniel.torres3rd@gmail.com',
+  password: 'placeholder'
 });
 
 user.save()
