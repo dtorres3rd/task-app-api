@@ -50,10 +50,19 @@ router.patch('/tasks/:id', async (req, res) => {
   }
 
   try {
-    const task = await Task.findByIdAndUpdate(_id, body, {
-      new: true,
-      runValidators: true,
-    });
+    // const task = await Task.findByIdAndUpdate(_id, body, {
+    //   new: true,
+    //   runValidators: true,
+    // });
+
+    const task = await Task.findById(_id)
+
+    updates.forEach((update) => {
+      // used bracket notation to get field dynamically, not binding to a specific property name
+      task[update] = body[update]
+    })
+
+    await task.save()
 
     if (!task) {
       return res.status(404).send();
