@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -38,6 +39,12 @@ const userSchema = new mongoose.Schema({
       //TODO
     }
   },
+  tokens: [{
+    token: {
+      type: String,
+      required: true
+    }
+  }],
 })
 
 /*
@@ -46,17 +53,28 @@ const userSchema = new mongoose.Schema({
 - the this pointer inside the callback function is equivalent to the document being saved
 */
 
+// we will not use arrow function to use "this" binding
+userSchema.methods.generateAuthToken = async function () {
+  const user = this;
+  const token = jwt.sign({ _id: user._id.toString() }, 'placeholdersecret');
+
+  user.tokens = user.tokens.concat({ token: token });
+  await user.save()
+
+  return token;
+};
+
 // this is a user creatd function "findByCredentials"
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email: email });
   if (!user) {
-    throw new Error('Unable to login1') 
+    throw new Error('Unable to login') 
   }
 
   const isMatch = await bcrypt.compare(password, user.password)
 
   if (!isMatch){
-    throw new Error('Unable to login2') 
+    throw new Error('Unable to login') 
   }
 
   return user

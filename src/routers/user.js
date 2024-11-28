@@ -7,7 +7,8 @@ router.post('/users', async (req, res) => {
 
   try {
     await user.save(); // equivalent to mongoose.model('User', {*field properties*}).send()
-    res.status(200).send(user);
+    const token = await user.generateAuthToken()
+    res.status(200).send({ user: user, token: token});
   } catch (e) {
     res.status(400).send(e);
   }
@@ -18,7 +19,8 @@ router.post('/users/login', async (req,res) => {
 
   try {
     const user = await User.findByCredentials(email, password)
-    res.send(user)
+    const token = await user.generateAuthToken()
+    res.send({ user: user, token: token})
   } catch (e) {
     res.status(400).send()
   }
