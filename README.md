@@ -1,6 +1,6 @@
 ** This md file will be updated occasionally **
-** This is a personal API project utilizing node.js and mongodb via mongoose library for utilizing model **
-** This branch will be an example of a node.js web server without express.js installed.**
+** This is a personal API project utilizing node.js, express.js and mongodb via mongoose library for utilizing model
+** This branch will be an example of a node.js web server without express.js middleware.**
 ** Flow: New request -> route handler vs IF with middleware like express.js, New request -> do something -> route handler ** 
 
 - mongodb hosted on MongoDB Atlas Free tier Database (mongodb.com)
