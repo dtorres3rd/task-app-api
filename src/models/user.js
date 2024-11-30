@@ -48,6 +48,11 @@ const userSchema = new mongoose.Schema({
 })
 
 /*
+  userSchema.methods vs userSchema.statics: methods is for individual instance of User Model
+  statics is for methods implemented for Models itself, in this case, User Model.
+*/
+
+/*
 - setup middleware for USER mongoose schema.
 - execute this callback async function before saving.
 - the this pointer inside the callback function is equivalent to the document being saved
@@ -63,6 +68,26 @@ userSchema.methods.generateAuthToken = async function () {
 
   return token;
 };
+
+/* 
+.toJSON method notes:
+- every object comes with a .toJSON method
+- when we run our code res.send(obj), it will automatically run JSON.stringify(obj), 
+which in turns uses obj.toJSON() to convert it into JSON, but as we have customised the method, 
+it will also remove the password and tokens.
+- We can override (overwrite / replace) this in-built .toJSON method with our own custom method to behave the way we want. 
+In our app, this means to delete the password and tokens properties. */
+userSchema.methods.toJSON = function () {
+  const user = this
+
+  //convert using toObject() (mongoose method) so that we can manipulate the object properties
+  const userObject = user.toObject()
+
+  delete userObject.password
+  delete userObject.tokens
+
+  return userObject
+}
 
 // this is a user creatd function "findByCredentials"
 userSchema.statics.findByCredentials = async (email, password) => {

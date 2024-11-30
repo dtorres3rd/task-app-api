@@ -6,13 +6,14 @@ const auth = async (req, res, next) => {
      const token = req.header('Authorization').replace('Bearer ', '')
      const decode = jwt.verify(token, 'placeholdersecret')
      // second parameter - tokens.token, means that the passed token must currently exist in user's token in mongo db to proceed
-     const user = await User.findById({ _id: decode._id, 'tokens.token': token }) 
+     const user = await User.findOne({ _id: decode._id, 'tokens.token': token }) 
 
      if (!user) {
         throw new Error()
      }
 
-     req.user = user
+     req.token = token // current logged in user's token
+     req.user = user // current logged in user
      next()
    } catch (error) {
         res.status(401).send({error: 'Please authenticate.'})
