@@ -7,5 +7,6 @@
 - used bcrypt for password hashing and saving to db for this side project as MVP. Note: will change this depending on future objectives for robust security
 - implemented JWT (JSON Web Token) for login user session implementation (Authentication tokens)
 - implemented multer library from npm for file uploads
+- implemented sharp library from npm to resize or reformat uploaded images
 
 

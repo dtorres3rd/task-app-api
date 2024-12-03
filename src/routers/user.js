@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require('multer')
+const sharp = require('sharp')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
 const router = new express.Router();
@@ -62,6 +63,7 @@ router.get('/users/me', auth, async (req, res) => {
   res.send(req.user);
 });
 
+/* this endpoint is for admin use, maybe implemented in the future */
 // router.get('/users/:id', async (req, res) => {
 //   const _id = req.params.id;
 
@@ -124,7 +126,8 @@ router.delete('/users/me', auth, async (req, res) => {
 });
 
 const upload = multer({
-  dest: 'avatars',
+  // commenting this out so that image will not be saved to filesystem, instead be accessible to route handler
+  // dest: 'avatars', 
   limits: {
     fileSize: 1000000, // 1m bytes = 1 mb
   },
@@ -133,9 +136,8 @@ const upload = multer({
     //   return callback(new Error('Please upload a PDF'));
     // }
 
-    
     //alternatively, regex can alse be used for validating upload file
-    if (file.originalname.match(/\.(jpg|jpeg|png|pdf)$/)) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
       return callback(new Error('Please upload an image'));
     }
 
@@ -144,13 +146,43 @@ const upload = multer({
   },
 });
 
-router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
-    res.send('File uploaded successfully');
+router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
+  const buffer = await sharp(req.file.buffer)
+    .resize({ width: 250, height: 250 })
+    .png()
+    .toBuffer();
+
+  req.user.avatar = buffer;
+  await req.user.save();
+  res.send({ message: 'Avatar uploaded successfully' });
   },
   // this callback is for handling unexpected errors
   (error, req, res, next) => {
     res.status(400).send({ error: error.message });
   }
 );
+
+router.get('/users/:id/avatar', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+
+    if (!user || !user.avatar) {
+      throw new Error()
+    }
+
+      res.set('Content-Type', 'image/png')
+      res.send(user.avatar)
+  } catch (e) {
+    res.status(404).send(e)
+  }
+})
+
+router.delete('/users/me/avatar', auth, async (req, res) => {
+  req.user.avatar = undefined;
+  await req.user.save();
+  res.send({ message: 'Avatar deleted' });
+});
+
+
 
 module.exports = router;
