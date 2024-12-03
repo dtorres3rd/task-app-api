@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const Task = require('./task.js')
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -45,7 +46,19 @@ const userSchema = new mongoose.Schema({
       required: true
     }
   }],
+}, {
+  timestamps: true
 })
+
+/* This is a virtual property used by mongoose, usually used for relationship between collections. 
+In this case, task and user */
+
+userSchema.virtual('tasks', {
+  ref: 'Task',
+  localField: '_id',
+  foreignField: 'owner'
+})
+
 
 /*
   userSchema.methods vs userSchema.statics: methods is for individual instance of User Model
@@ -114,6 +127,14 @@ userSchema.pre('save', async function (next) {
   }
 
   // this is needed to confirm that this function is done, proceeding to the next logic - code
+  next()
+})
+
+/* Delete tasks when related user is removed/deleted
+this is also exclusive from mongoose middleware function */
+userSchema.pre('deleteOne', { document: true }, async function(next) {
+  const user = this
+  await Task.deleteMany({ owner: user._id })
   next()
 })
 
