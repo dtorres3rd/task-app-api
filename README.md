@@ -6,5 +6,6 @@
 - used express.Router for routing endpoints to index.js
 - used bcrypt for password hashing and saving to db for this side project as MVP. Note: will change this depending on future objectives for robust security
 - implemented JWT (JSON Web Token) for login user session implementation (Authentication tokens)
+- implemented multer library from npm for file uploads
 
 

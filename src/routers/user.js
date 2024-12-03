@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
 const router = new express.Router();
@@ -121,5 +122,35 @@ router.delete('/users/me', auth, async (req, res) => {
     res.status(500).send(e);
   }
 });
+
+const upload = multer({
+  dest: 'avatars',
+  limits: {
+    fileSize: 1000000, // 1m bytes = 1 mb
+  },
+  fileFilter(req, file, callback) {
+    // if (!file.originalname.endsWith('.pdf')) {
+    //   return callback(new Error('Please upload a PDF'));
+    // }
+
+    
+    //alternatively, regex can alse be used for validating upload file
+    if (file.originalname.match(/\.(jpg|jpeg|png|pdf)$/)) {
+      return callback(new Error('Please upload an image'));
+    }
+
+    // this means the uploaded file passed the fileFilter
+    callback(undefined, true)
+  },
+});
+
+router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
+    res.send('File uploaded successfully');
+  },
+  // this callback is for handling unexpected errors
+  (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
+  }
+);
 
 module.exports = router;
