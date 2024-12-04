@@ -10,7 +10,7 @@ const app = express();
 const { PORT, MAINTENANCE_MODE } = keys;
 
 /* TODO: Set a maintenance mode in environment var to act as a toggle for maintenance mode */
-if (MAINTENANCE_MODE) {
+if (MAINTENANCE_MODE === 'true') {
   app.use((req, res) => {
     // console.log(req.method, req.path)
     res.status(503).send('Site is in maintenance mode, Check back soon.');
