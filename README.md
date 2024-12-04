@@ -1,6 +1,6 @@
 ** This md file will be updated occasionally ** 
 
-** This is a personal API project utilizing node.js, express.js and mongodb via mongoose library for utilizing model **
+** This is a side project Webservice API utilizing node.js, express.js and mongodb via mongoose library for utilizing model **
 
 ** Backend URL: **https://task-app-api-xxr2.onrender.com**, uses render's free instance types. **
 
