@@ -8,10 +8,9 @@ const taskRouter = require('./routers/task')
 
 const app = express();
 const { PORT, MAINTENANCE_MODE } = keys;
-const maintenance_mode = MAINTENANCE_MODE;
 
 /* TODO: Set a maintenance mode in environment var to act as a toggle for maintenance mode */
-if (maintenance_mode) {
+if (MAINTENANCE_MODE) {
   app.use((req, res) => {
     // console.log(req.method, req.path)
     res.status(503).send('Site is in maintenance mode, Check back soon.');
