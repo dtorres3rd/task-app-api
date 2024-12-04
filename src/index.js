@@ -7,8 +7,8 @@ const userRouter = require('./routers/user')
 const taskRouter = require('./routers/task')
 
 const app = express();
-const port = keys.PORT;
-const maintenance_mode = process.env.MAINTENANCE_MODE || false;
+const { PORT, MAINTENANCE_MODE } = keys;
+const maintenance_mode = MAINTENANCE_MODE;
 
 /* TODO: Set a maintenance mode in environment var to act as a toggle for maintenance mode */
 if (maintenance_mode) {
@@ -18,15 +18,9 @@ if (maintenance_mode) {
   });
 }
 
-//authentication
-// app.use((req, res, next) => {
-//   // console.log(req.method, req.path)
-//   // if (req.method === 'GET'){
-//   //   next()
-//   // }
-
-//   res.status(503).send('Site is in maintenance mode, Check back soon.')
-// })
+app.get('/healthcheck', (req, res) => {
+  res.send({'status': 'ok'})
+})
 
 //automatically parse incoming JSON to object, so it can be accessed in request handler
 app.use(express.json());
@@ -36,8 +30,8 @@ app.use(userRouter);
 app.use(taskRouter);
 
 
-app.listen(port, () => {
-  console.log('Server is up on port ' + port);
+app.listen(PORT, () => {
+  console.log('Server is up on port ' + PORT);
 });
 
 const jwt = require('jsonwebtoken')
