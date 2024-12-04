@@ -2,6 +2,8 @@
 
 ** This is a personal API project utilizing node.js, express.js and mongodb via mongoose library for utilizing model **
 
+** Backend URL: **https://task-app-api-xxr2.onrender.com** **
+
 - mongodb hosted on MongoDB Atlas Free tier Database (mongodb.com)
 - installed validator library for validating user input for mongoose model (reference for schema types: https://mongoosejs.com/docs/schematypes.html)
 - used express.Router for routing endpoints to index.js
@@ -10,6 +12,7 @@
 - implemented multer library from npm for file uploads
 - implemented sharp library from npm to resize or reformat uploaded images
 - implemented email functionality (welcome email and cancellation email) via sendGrid
+- inital deploy to render for production environment 
 
 
 
