@@ -1,6 +1,6 @@
 module.exports= {
     PORT: process.env.PORT,
-    MAINTENANCE_MODE: MAINTENANCE_MODE,
+    MAINTENANCE_MODE: process.env.MAINTENANCE_MODE,
     JWT_SECRET: process.env.JWT_SECRET,
     mongoURI: process.env.MONGO_URI,
     mailgunAPIKey: process.env.MAILGUN_API_KEY,
