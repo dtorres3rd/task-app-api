@@ -1,4 +1,5 @@
 const express = require('express');
+const keys = require('../config/keys');
 //ensure mongoose database will run upon loading
 require('./db/mongoose');
 
@@ -6,7 +7,7 @@ const userRouter = require('./routers/user')
 const taskRouter = require('./routers/task')
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = keys.PORT;
 const maintenance_mode = process.env.MAINTENANCE_MODE || false;
 
 /* TODO: Set a maintenance mode in environment var to act as a toggle for maintenance mode */

@@ -1,10 +1,12 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
+const keys = require('../../config/keys');
+
 
 const auth = async (req, res, next) => {
    try {
      const token = req.header('Authorization').replace('Bearer ', '')
-     const decode = jwt.verify(token, 'placeholdersecret')
+     const decode = jwt.verify(token, keys.JWT_SECRET)
      // second parameter - tokens.token, means that the passed token must currently exist in user's token in mongo db to proceed
      const user = await User.findOne({ _id: decode._id, 'tokens.token': token }) 
 

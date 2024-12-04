@@ -9,5 +9,7 @@
 - implemented JWT (JSON Web Token) for login user session implementation (Authentication tokens)
 - implemented multer library from npm for file uploads
 - implemented sharp library from npm to resize or reformat uploaded images
+- implemented email functionality (welcome email and cancellation email) via sendGrid
+
 
 

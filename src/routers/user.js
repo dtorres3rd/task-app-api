@@ -3,6 +3,7 @@ const multer = require('multer')
 const sharp = require('sharp')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
+const { sendWelcomeEmail, sendCancellationEmail } = require('../emails/account')
 const router = new express.Router();
 
 router.post('/users', async (req, res) => {
@@ -10,6 +11,7 @@ router.post('/users', async (req, res) => {
 
   try {
     await user.save(); // equivalent to mongoose.model('User', {*field properties*}).send()
+    sendWelcomeEmail(user.email, user.name)
     const token = await user.generateAuthToken()
     res.status(201).send({ user: user, token: token});
   } catch (e) {
@@ -119,6 +121,7 @@ router.delete('/users/me', auth, async (req, res) => {
 
   try {
     await req.user.deleteOne()
+    sendCancellationEmail(req.user.email, req.user.name)
     res.send(req.user);
   } catch (e) {
     res.status(500).send(e);
