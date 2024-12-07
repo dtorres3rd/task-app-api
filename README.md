@@ -10,6 +10,10 @@ to run locally:
  - run in terminal: npm run dev
  - reach out via email for the dev keys inside config folder (daniel.torres3rd@gmail.com)
 
+TODO:
+ - Create web ui
+ - implement testing via jest
+
 Dev logs:
 - mongodb hosted on MongoDB Atlas Free tier Database (mongodb.com)
 - installed validator library for validating user input for mongoose model (reference for schema types: https://mongoosejs.com/docs/schematypes.html)
